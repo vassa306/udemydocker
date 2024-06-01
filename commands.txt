@@ -1,0 +1,12 @@
+docker build -t pythonappudemy .  Build a new image with python 3 
+copy everything from /app to the container /app
+run python rng.py 
+
+docker run name of the container will failed because the script requires input from the user. 
+
+docker run -ai name of the container 
+restart the container in attached and interactive mode. 
+
+docker run -a name of the container 
+run container in attached mode, in this example will work in one more time. It causes problems when you need to rerun that again. 
+
