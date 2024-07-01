@@ -1,5 +1,5 @@
 from random import randint
-
+#test
 min_number = int(input("please enter the min number"))
 max_number = int(input("Please enter the max number"))
 
