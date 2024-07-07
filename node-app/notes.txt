@@ -1,0 +1,5 @@
+docker run -p "8000:3000" -d  --rm  --name nodeapp3 node:2.0
+docker images
+docker ps -a 
+docker exec nodeapp3 bin/ash
+docker run --it bmi2
