@@ -25,37 +25,24 @@ app.get('/exists', (req, res) => {
 app.post('/create', async (req, res) => {
   const title = req.body.title;
   const content = req.body.text;
+
   const adjTitle = title.toLowerCase();
 
   const tempFilePath = path.join(__dirname, 'temp', adjTitle + '.txt');
   const finalFilePath = path.join(__dirname, 'feedback', adjTitle + '.txt');
 
-  console.log("TEST !!!!")
+  console.log('TEST!!!!!');
 
-  try {
-    // Write content to the temporary file
-    await fs.writeFile(tempFilePath, content);
-
-    try {
-      // Check if the final file already exists
-      await fs.access(finalFilePath);
-      // If the file exists, redirect to /exists
+  await fs.writeFile(tempFilePath, content);
+  exists(finalFilePath, async (exists) => {
+    if (exists) {
       res.redirect('/exists');
-    } catch (err) {
-      // If the file does not exist, proceed to copy the temp file
-      if (err.code === 'ENOENT') {
-        await fs.copyFile(tempFilePath, finalFilePath);
-        await fs.unlink(tempFilePath);
-        res.redirect('/');
-      } else {
-        // Handle other errors (optional)
-        throw err;
-      }
+    } else {
+      await fs.copyFile(tempFilePath, finalFilePath);
+      await fs.unlink(tempFilePath);
+      res.redirect('/');
     }
-  } catch (err) {
-    // Handle file system errors
-    res.status(500).send('Internal server error occured');
-  }
+  });
 });
 
-app.listen(80);
+app.listen(process.env.PORT);
