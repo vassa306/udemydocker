@@ -1,18 +1,21 @@
-Dockerize BOTH apps - the Python and the Node app.
+create anonymous volume
+docker run -d --rm -p 3000:80 --name feedback-app -v /app/temp 
 
-1) Create appropriate images for both apps (two separate images!).
-HINT: Have a brief look at the app code to configure your images correctly!
+anonymous volumes is located somewhere by docker. 
+It is used if you need to persist some folders. node_modules etc .
+After rm will be deleted.
 
-2) Launch a container for each created image, making sure, 
-that the app inside the container works correctly and is usable.
 
-3) Re-create both containers and assign names to both containers.
-Use these names to stop and restart both containers.
+Named volumes 
+docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback -v
+It is controled by docker, you can find the volume according to name. 
 
-4) Clean up (remove) all stopped (and running) containers, 
-clean up all created images.
 
-5) Re-build the images - this time with names and tags assigned to them.
+bind mount 
+docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback -v "/home/vasa/Documents/udemydocker:/app:ro" 
+Bind mount is not supervised by docker, is located on the local pc. Is used when you need to edit source data for example. 
+You do not have to rebuild the image, after change in the source code. 
 
-6) Run new containers based on the re-built images, ensuring that the containers
-are removed automatically when stopped.
+all 3 volume types together
+docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback -v "/home/vasa/Documents/udemydocker:/app:ro" -v /app/temp -v /app/node_modules feedback-node:volumes
+
