@@ -1,20 +1,14 @@
-FROM node:14
-
+FROM node
 
 WORKDIR /app
 
 COPY package.json .
 
 RUN npm install
-
+ENV INTERNAL_ERROR 500
 COPY . .
 
-ARG DEFAULT_PORT=80
-
-ENV PORT $DEFAULT_PORT
-
+ENV PORT 3000
 EXPOSE $PORT
 
-# VOLUME [ "/app/node_modules" ]
-
-CMD [ "npm", "start" ]
+CMD ["node", "app.js"]
