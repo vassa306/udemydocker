@@ -1,0 +1,15 @@
+#create network for docker container 
+docker network create test 
+docker network ls list of docker networks
+
+#connect to network:
+docker run -network my-network --name cont1 my-image
+
+
+Requests from container to WWW allowed automatically
+Request to other container is forbidden.
+
+request from container to host machine, use ##host.docker.internal
+
+
+
