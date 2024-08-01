@@ -1,15 +1,25 @@
 #create network for docker container 
-docker network create test 
-docker network ls list of docker networks
 
-#connect to network:
-docker run -network my-network --name cont1 my-image
+#run app_backend with named volume and mind mount for backend folder also use unnamed volume for persist node_modulesS 
+docker run 
+ --network favorites-net 
+ --name app_backend
+ # named volumes for logs 
+ -v logs:/app/logs
+ #bind mount 
+ -v /home/vasa/Documents/udemydocker/backend:/app
+ #unnamed volume 
+ -v /app/node_modules 
+ --rm 
+ -p 80:80 
+ app-back
 
-
-Requests from container to WWW allowed automatically
-Request to other container is forbidden.
-
-request from container to host machine, use ##host.docker.internal
-
-
+#run mongo db container with environment variables
+docker run 
+  --name mongodb  
+  -v data:/data/db 
+  -d 
+  --rm 
+  --network favorites-net 
+  -e MONGODB_USERNAME=max mongo:4.0.8  
 
