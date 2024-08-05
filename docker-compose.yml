@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+
+  mongodb:
+    image: "mongo:4.0.8" 
+    container_name: "mongo-server"   
+    volumes:
+     - data:/data/db
+    env_file:
+     - ./env/mongo.env 
+    networks:
+     - favorites-net  
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8080:8081
+    container_name: mongoui
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=max
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=secret
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+  
+
+    networks:
+      - favorites-net
+
+  backend:
+    build: ./backend
+    #dockerfile: Dockerfile
+    ports:
+      - 80:80
+
+    volumes:
+      - logs:/app/logs
+      - ./backend/:/app
+      - /app/node_modules
+    
+    env_file:
+      - ./env/backend.env 
+
+    depends_on: 
+      - mongodb
+    networks:
+      - favorites-net
+
+  frontend:
+    build: ./frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend/src:/app/src
+
+    stdin_open: true
+    tty: true
+
+    depends_on:
+      - backend
+
+volumes:
+  data:
+  logs:
+
+networks:
+  favorites-net:
